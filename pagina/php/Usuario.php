@@ -65,7 +65,7 @@ function enviarCorreoverificacion($asunto, $mensaje) {
 
       // Configurar remitente y destinatario
       $mail->setFrom('no-reply@workele.com', 'Equipo workele');
-      $mail->addAddress('verificacion.empresa@workele.com');
+      $mail->addAddress('verificacion.empresas@workele.com');
 
       // Configurar el contenido del correo
       $mail->isHTML(true); // Habilitar el formato HTML
