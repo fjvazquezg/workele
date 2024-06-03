@@ -106,7 +106,7 @@
                             text: 'Elemento Guardado',
                             icon: 'success'
                         }).then(function () {
-                            window.location.href = "../templates/aficiones.php";
+                            window.location.href = "../templates/Aficiones.php";
                         });
                     } else if (response == "errorDuplicado") {
                       Swal.fire({
