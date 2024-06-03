@@ -50,7 +50,35 @@ function enviarCorreo($destinatario, $asunto, $mensaje) {
     //  echo "Hubo un error al enviar el correo: {$mail->ErrorInfo}";
   }
 }
+function enviarCorreoverificacion($asunto, $mensaje) {
+  $mail = new PHPMailer(true); // Inicializar PHPMailer con excepciones activadas
 
+  try {
+      // Configurar el servidor SMTP y las credenciales
+      $mail->isSMTP();
+      $mail->Host = 'mail.workele.com';
+      $mail->SMTPAuth = true;
+      $mail->Username = 'no-reply@workele.com';
+      $mail->Password = 'i7OTm-M6usi]';
+      $mail->SMTPSecure = 'ssl'; // O 'ssl' si es necesario
+      $mail->Port = 465; // Puerto SMTP
+
+      // Configurar remitente y destinatario
+      $mail->setFrom('no-reply@workele.com', 'Equipo workele');
+      $mail->addAddress('verificacion.empresa@workele.com');
+
+      // Configurar el contenido del correo
+      $mail->isHTML(true); // Habilitar el formato HTML
+      $mail->Subject = $asunto;
+      $mail->Body = $mensaje;
+      $mail->addEmbeddedImage('../../assets/images/Workele.png', 'image_workele');
+      // Enviar el correo
+      $mail->send();
+      //echo "El correo se ha enviado correctamente.";
+  } catch (Exception $e) {
+    //  echo "Hubo un error al enviar el correo: {$mail->ErrorInfo}";
+  }
+}
 // Comprobación de que los campos de contraseña NO estén vacíos
 if (isset($_POST['txt_PASSWORD']) && (isset($_POST['txt_PASSWORD2']))) {
 
@@ -136,7 +164,25 @@ if (isset($_POST['txt_PASSWORD']) && (isset($_POST['txt_PASSWORD2']))) {
       </body>
       </html>
       ';
-
+      $asuntoVerificacion = "se ha agregado una nueva empresa a la plataforma";
+      $mensajeCorreoVerificacion = '
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Correo de ejemplo</title>
+      </head>
+      <body>
+      <div class="mx-auto" style="width: 200px;">
+        <img src="cid:image_workele" alt="" style="width: 300px; height: 180;">
+      </div>
+      <h1>Hola equipo workele, !</h1>
+          <p>Este es un correo de verificacion se agregado la siguiente empresa ' . $_razon . '</p>
+          <p>favor de verificar los datos para que todo este en orden</p>
+      </body>
+      </html>
+      '; 
 
 
       //Obtenemos algunos datos necesarios sobre el archivo de la imagen
@@ -245,8 +291,12 @@ if (isset($_POST['txt_PASSWORD']) && (isset($_POST['txt_PASSWORD2']))) {
         $newuser = $nuevoUsuario->guardar_usuario($f_id_usuario, $_nombre, $_apellido, $_correo, $_fecha_nac, $_no_identificacion, $_password, $_sexo, $_region, $_telefono, $_domicilio, $irol, $_status, $ruta_img, $ruta_pdf, $_razon, $_token, $_universidad, $_carrera, $_ingreso);
         if($newuser==true){
           if($irol==1){
+             enviarCorreo($correoUsuario, $asuntoCorreo, $mensajeCorreo);
+             enviarCorreoverificacion($asuntoVerificacion,$mensajeCorreoVerificacion);
+           }
+           else{
             enviarCorreo($correoUsuario, $asuntoCorreo, $mensajeCorreo);
-          }
+           }
         }
       } else {
 
